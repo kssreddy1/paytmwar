@@ -56,6 +56,14 @@
     <maven.compiler.source>1.6</maven.compiler.source>
     <maven.compiler.target>1.6</maven.compiler.target>
    </properties>
+    
+    <distributionManagement>
+    <repository>
+      <id>deployment</id>
+      <name>maven-snapshot1</name>
+      <url>http://13.235.246.206:8081/repository/maven-snapshot1/</url>
+    </repository>
+  </distributionManagement>
   
   <dependencies>
     <dependency>
