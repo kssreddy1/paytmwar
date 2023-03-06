@@ -1,0 +1,68 @@
+CPU UTILIZATION SCRIPTS
+--------------------------
+1. 
+#!/bin/bash
+
+CPU_USAGE=$(top -b -n2 -p 1 | fgrep "Cpu(s)" | tail -1 | awk -F'id,' -v prefix="$prefix" '{ split($1, vs, ","); v=vs[length(vs)]; sub("%", "", v); printf "%s%.1f%%\n", prefix, 100 - v }')
+
+DATE=$(date "+%Y-%m-%d %H:%M:")
+
+CPU_USAGE="$DATE CPU: $CPU_USAGE"
+
+echo $CPU_USAGE >> /opt/cpu_usage.out
+
+
+2.
+#! /bin/bash
+printf "Date\t\t\tMemory\t\tDisk\t\tCPU\n"
+end=$((SECONDS+3600))
+while [ $SECONDS -lt $end ]; do
+CURRENTDATE=`date +"%Y-%m-%d %T"`
+MEMORY=$(free -m | awk 'NR==2{printf " \t%.2f%%\t\t", $3*100/$2 }')
+DISK=$(df -h | awk '$NF=="/"{printf "%s\t\t", $5}')
+CPU=$(top -bn1 | grep load | awk '{printf "%.2f%%\t\t\n", $(NF-2)}')
+echo  ${CURRENTDATE} "$MEMORY$DISK$CPU"
+sleep 5
+done
+
+3.
+#!/bin/bash
+cpuuse=$(cat /proc/loadavg | awk '{print $3}'|cut -f 1 -d ".")
+if [ "$cpuuse" -ge 90 ]; then
+SUBJECT="ATTENTION: CPU load is high on $(hostname) at $(date)"
+MESSAGE="/tmp/Mail.out"
+TO="example@gmail.com"
+  echo "CPU current usage is: $cpuuse%" >> $MESSAGE
+  echo "" >> $MESSAGE
+  echo "+------------------------------------------------------------------+" >> $MESSAGE
+  echo "Top 20 processes which consuming high CPU" >> $MESSAGE
+  echo "+------------------------------------------------------------------+" >> $MESSAGE
+  echo "$(top -bn1 | head -20)" >> $MESSAGE
+  echo "" >> $MESSAGE
+  echo "+------------------------------------------------------------------+" >> $MESSAGE
+  echo "Top 10 Processes which consuming high CPU using the ps command" >> $MESSAGE
+  echo "+------------------------------------------------------------------+" >> $MESSAGE
+  echo "$(ps -eo pcpu,pid,user,args | sort -k 1 -r | head -10)" >> $MESSAGE
+  mail -s "$SUBJECT" "$TO" < $MESSAGE
+  rm /tmp/Mail.out
+else
+echo "Server CPU usage is in under threshold"
+  fi
+
+4. 
+#!/bin/bash
+# This script monitors CPU and memory usage
+
+while :
+do 
+  # Get the current usage of CPU and memory
+  cpuUsage=$(top -bn1 | awk '/Cpu/ { print $2}')
+  memUsage=$(free -m | awk '/Mem/{print $3}')
+
+  # Print the usage
+  echo "CPU Usage: $cpuUsage%"
+  echo "Memory Usage: $memUsage MB"
+ 
+  # Sleep for 1 second
+  sleep 1
+done
