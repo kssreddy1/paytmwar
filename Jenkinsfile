@@ -8,7 +8,7 @@ pipeline {
   stages {
     stage('SCM') {
       steps {
-        build 'PIPE'
+        build 'Pipeline'
       }
     }
 
