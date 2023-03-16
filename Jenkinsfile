@@ -33,5 +33,11 @@ pipeline {
       }
     }
 
+    stage('EMAIL') {
+      steps {
+        emailext(subject: 'Build Success Mai', body: 'this is regarding Build Success or failure mails', from: 'samba81424.sr@gmail.com', replyTo: 'samba81424.sr@gmail.com', to: 'samba81424.sr@gmail.com')
+      }
+    }
+
   }
 }
