@@ -33,9 +33,15 @@ pipeline {
       }
     }
 
-    stage('EMAIL') {
+    stage('Deploy Artifacts Into Tomcat') {
       steps {
-        emailext(subject: 'Build Success Mai', body: 'this is regarding Build Success or failure mails', from: 'samba81424.sr@gmail.com', replyTo: 'samba81424.sr@gmail.com', to: 'samba81424.sr@gmail.com')
+        sh 'scp /home/ubuntu/jenkins/workspace/paytmwar_master/target/test-bus.war 15.207.222.96:/opt/tomcat9/webapps'
+      }
+    }
+
+    stage('') {
+      steps {
+        emailext(subject: 'Build ', body: 'This is regarding Build Success or Failure Information purpose', from: 'samba81424.sr@gmail.com', replyTo: 'samba81424.sr@gmail.comsamba81424.sr@gmail.com', to: 'samba81424.sr@gmail.com')
       }
     }
 
