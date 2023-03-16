@@ -35,7 +35,7 @@ pipeline {
 
     stage('Deploy Artifacts Into Tomcat') {
       steps {
-        sh 'scp /home/ubuntu/jenkins/workspace/paytmwar_master/target/test-bus.war 172.31.1.86:/opt/tomcat9/webapps'
+        sh 'scp /home/ubuntu/jenkins/workspace/paytmwar_master/target/test-bus.war 172.31.1.86:/opt/tomcat9/webapps/'
       }
     }
 
